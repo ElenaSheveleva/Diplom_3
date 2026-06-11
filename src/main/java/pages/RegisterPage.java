@@ -1,71 +1,69 @@
 package pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
 
 public class RegisterPage extends BasePage {
 
-    @FindBy(xpath = "//label[text()='Имя']/following-sibling::input")
+    @FindBy(xpath = "//input[@name='name']")
     private WebElement nameInput;
 
-    @FindBy(xpath = "//label[text()='Email']/following-sibling::input")
+    @FindBy(xpath = "//input[@name='name' and @type='text']")
     private WebElement emailInput;
 
-    @FindBy(xpath = "//label[text()='Пароль']/following-sibling::input")
+    @FindBy(xpath = "//input[@name='Пароль']")
     private WebElement passwordInput;
 
     @FindBy(xpath = "//button[text()='Зарегистрироваться']")
     private WebElement registerButton;
 
+    @FindBy(xpath = "//a[text()='Войти']")
+    private WebElement loginLink;
+
     @FindBy(xpath = "//p[text()='Некорректный пароль']")
     private WebElement errorPasswordMessage;
-
-    @FindBy(xpath = "//a[@href='/login']")
-    private WebElement loginLink;
 
     public RegisterPage(WebDriver driver) {
         super(driver);
     }
 
-    public void enterName(String name) {
+    @Step("Заполнение имени: {name}")
+    public void setName(String name) {
         nameInput.sendKeys(name);
     }
 
-    public void enterEmail(String email) {
+    @Step("Заполнение email: {email}")
+    public void setEmail(String email) {
         emailInput.sendKeys(email);
     }
 
-    public void enterPassword(String password) {
+    @Step("Заполнение пароля")
+    public void setPassword(String password) {
         passwordInput.sendKeys(password);
     }
 
+    @Step("Клик по кнопке 'Зарегистрироваться'")
     public void clickRegisterButton() {
         registerButton.click();
     }
 
+    @Step("Регистрация пользователя: {name}, {email}")
+    public void register(String name, String email, String password) {
+        setName(name);
+        setEmail(email);
+        setPassword(password);
+        clickRegisterButton();
+    }
+
+    @Step("Клик по ссылке 'Войти'")
     public void clickLoginLink() {
         loginLink.click();
     }
 
+    @Step("Проверка отображения сообщения об ошибке пароля")
     public boolean isErrorPasswordDisplayed() {
         return errorPasswordMessage.isDisplayed();
-    }
-
-    public void register(String name, String email, String password) {
-        enterName(name);
-        enterEmail(email);
-        enterPassword(password);
-        clickRegisterButton();
-    }
-
-    public void registerAndWait(String name, String email, String password) {
-        register(name, email, password);
-        new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.urlContains("/login"));
     }
 }

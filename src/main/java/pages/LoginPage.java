@@ -1,6 +1,6 @@
 package pages;
 
-import org.openqa.selenium.By;
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,50 +11,49 @@ import java.time.Duration;
 
 public class LoginPage extends BasePage {
 
-    @FindBy(xpath = "//label[text()='Email']/following-sibling::input")
+    private WebDriverWait wait;
+
+    @FindBy(xpath = "//input[@name='name' and @type='text']")
     private WebElement emailInput;
 
-    @FindBy(xpath = "//label[text()='Пароль']/following-sibling::input")
+    @FindBy(xpath = "//input[@name='Пароль']")
     private WebElement passwordInput;
 
-    @FindBy(xpath = "//button[text()='Войти']")
+    @FindBy(xpath = "//button[contains(text(), 'Войти')]")
     private WebElement loginButton;
 
-    @FindBy(xpath = "//a[@href='/register']")
+    @FindBy(xpath = "//a[text()='Зарегистрироваться']")
     private WebElement registerLink;
-
-    @FindBy(xpath = "//a[@href='/forgot-password']")
-    private WebElement forgotPasswordLink;
 
     public LoginPage(WebDriver driver) {
         super(driver);
+        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    public void enterEmail(String email) {
-        emailInput.sendKeys(email);
+    @Step("Заполнение email: {email}")
+    public void setEmail(String email) {
+        wait.until(ExpectedConditions.visibilityOf(emailInput)).sendKeys(email);
     }
 
-    public void enterPassword(String password) {
+    @Step("Заполнение пароля")
+    public void setPassword(String password) {
         passwordInput.sendKeys(password);
     }
 
+    @Step("Клик по кнопке 'Войти'")
     public void clickLoginButton() {
-        loginButton.click();
+        wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
     }
 
-    public void clickRegisterLink() {
-        registerLink.click();
-    }
-
-    public void clickForgotPasswordLink() {
-        forgotPasswordLink.click();
-    }
-
+    @Step("Выполнение входа с email: {email}")
     public void login(String email, String password) {
-        enterEmail(email);
-        enterPassword(password);
+        setEmail(email);
+        setPassword(password);
         clickLoginButton();
-        new WebDriverWait(driver, Duration.ofSeconds(5))
-                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1[text()='Соберите бургер']")));
+    }
+
+    @Step("Клик по ссылке 'Зарегистрироваться'")
+    public void clickRegisterLink() {
+        wait.until(ExpectedConditions.elementToBeClickable(registerLink)).click();
     }
 }

@@ -1,13 +1,9 @@
 package pages;
 
-import org.openqa.selenium.By;
+import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
 
 public class BurgerConstructorPage extends BasePage {
 
@@ -33,32 +29,32 @@ public class BurgerConstructorPage extends BasePage {
         super(driver);
     }
 
+    @Step("Клик по вкладке 'Булки'")
     public void clickBunsTab() {
         bunsTab.click();
-        new WebDriverWait(driver, Duration.ofSeconds(3))
-                .until(ExpectedConditions.visibilityOf(bunsSection));
     }
 
+    @Step("Клик по вкладке 'Соусы'")
     public void clickSaucesTab() {
         saucesTab.click();
-        new WebDriverWait(driver, Duration.ofSeconds(3))
-                .until(ExpectedConditions.visibilityOf(saucesSection));
     }
 
+    @Step("Клик по вкладке 'Начинки'")
     public void clickFillingsTab() {
         fillingsTab.click();
-        new WebDriverWait(driver, Duration.ofSeconds(3))
-                .until(ExpectedConditions.visibilityOf(fillingsSection));
     }
 
+    @Step("Проверка отображения раздела 'Булки'")
     public boolean isBunsSectionDisplayed() {
         return bunsSection.isDisplayed();
     }
 
+    @Step("Проверка отображения раздела 'Соусы'")
     public boolean isSaucesSectionDisplayed() {
         return saucesSection.isDisplayed();
     }
 
+    @Step("Проверка отображения раздела 'Начинки'")
     public boolean isFillingsSectionDisplayed() {
         return fillingsSection.isDisplayed();
     }
